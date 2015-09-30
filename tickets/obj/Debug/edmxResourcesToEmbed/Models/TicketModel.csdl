@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="TicketModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+  <EntityContainer Name="TicketModelContainer" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Events" EntityType="TicketModel.Event" />
+    <EntitySet Name="Tickets" EntityType="TicketModel.Ticket" />
+    <AssociationSet Name="EventTicket" Association="TicketModel.EventTicket">
+      <End Role="Event" EntitySet="Events" />
+      <End Role="Ticket" EntitySet="Tickets" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Event">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <Property Name="Description" Type="String" Nullable="false" />
+    <Property Name="Price" Type="Int32" Nullable="false" />
+    <Property Name="NumberOfTickets" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Tickets" Relationship="TicketModel.EventTicket" FromRole="Event" ToRole="Ticket" />
+  </EntityType>
+  <EntityType Name="Ticket">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Paid" Type="Boolean" Nullable="false" />
+    <Property Name="Used" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Event" Relationship="TicketModel.EventTicket" FromRole="Ticket" ToRole="Event" />
+    <Property Name="EventId" Type="Int32" Nullable="false" />
+  </EntityType>
+  <Association Name="EventTicket">
+    <End Type="TicketModel.Event" Role="Event" Multiplicity="1" />
+    <End Type="TicketModel.Ticket" Role="Ticket" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Event">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Ticket">
+        <PropertyRef Name="EventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
